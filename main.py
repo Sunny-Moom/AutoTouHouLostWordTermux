@@ -8,7 +8,7 @@ import numpy as np
 import pytesseract
 
 # 关卡名
-play_text = '姐妹'
+play_text = '中'
 
 
 # 定义一个函数，接受一个图片路径和一个词作为参数
@@ -34,10 +34,8 @@ def get_word_coordinates(image_path, word):
 
 # 使用adb截图
 def adb_image():
-    subprocess.call("adb shell screencap -p /sdcard/screen.png", shell=True, stdout=subprocess.DEVNULL)
-    subprocess.call("adb pull /sdcard/screen.png ./img/screen.png", shell=True, stdout=subprocess.DEVNULL)
-    subprocess.call("adb shell rm /sdcard/screen.png", shell=True, stdout=subprocess.DEVNULL)
-
+    subprocess.call("sh rish -c \"screencap -p /storage/emulated/0/termux/github/AutoTouHouLostWordTermux/img/screen.png\"", shell=True, stdout=subprocess.DEVNULL)
+    
 
 # OCR识别点击
 def find_and_click(text):
@@ -50,7 +48,7 @@ def find_and_click(text):
         sys.stdout.write("\033[F")  # 光标上移一行
         sys.stdout.write("\033[K")  # 清除当前行
         # 模拟点击
-        subprocess.call("adb shell input tap {} {}".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
+        subprocess.call("sh rish -c \"input tap {} {}\"".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
     else:
         print("\033[31m" + f"未找到匹配图像，3秒后重新查找" + "\033[0m")
         time.sleep(3)
@@ -80,7 +78,7 @@ def match_image(template_file, num, cold):
         sys.stdout.write("\033[F")  # 光标上移一行
         sys.stdout.write("\033[K")  # 清除当前行
         # 模拟点击
-        subprocess.call("adb shell input tap {} {}".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
+        subprocess.call("sh rish -c \"input tap {} {}\"".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
     else:
         print("\033[31m" + f"未找到匹配图像，{cold} 秒后重新查找" + "\033[0m")
         sys.stdout.write("\033[F")  # 光标上移一行
