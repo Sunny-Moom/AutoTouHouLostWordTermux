@@ -8,7 +8,7 @@ import numpy as np
 import pytesseract
 
 # 关卡名
-play_text = '中'
+play_text = '血'
 
 
 # 定义一个函数，接受一个图片路径和一个词作为参数
