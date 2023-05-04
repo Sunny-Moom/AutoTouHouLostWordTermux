@@ -39,52 +39,54 @@ def adb_image():
 
 # OCR识别点击
 def find_and_click(text):
-    # 加载图像
+    while True:
+        # 加载图像
 
-    adb_image()
-    center = get_word_coordinates('./img/screen.png', text)
-    if center is not None:
-        print("\033[32m" + "找到匹配图像，中心点坐标为：" + "\033[0m", center)
-        sys.stdout.write("\033[F")  # 光标上移一行
-        sys.stdout.write("\033[K")  # 清除当前行
-        # 模拟点击
-        subprocess.call("sh rish -c \"input tap {} {}\"".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
-    else:
-        print("\033[31m" + f"未找到匹配图像，3秒后重新查找" + "\033[0m")
-        time.sleep(3)
-        sys.stdout.write("\033[F")  # 光标上移一行
-        sys.stdout.write("\033[K")  # 清除当前行
-        find_and_click(text)
+        adb_image()
+        center = get_word_coordinates('./img/screen.png', text)
+        if center is not None:
+            print("\033[32m" + "找到匹配图像，中心点坐标为：" + "\033[0m", center)
+            sys.stdout.write("\033[F")  # 光标上移一行
+            sys.stdout.write("\033[K")  # 清除当前行
+            # 模拟点击
+            subprocess.call("sh rish -c \"input tap {} {}\"".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
+            break
+        else:
+            print("\033[31m" + f"未找到匹配图像，3秒后重新查找" + "\033[0m")
+            time.sleep(3)
+            sys.stdout.write("\033[F")  # 光标上移一行
+            sys.stdout.write("\033[K")  # 清除当前行
 
 
 # 图像识别并点击
 def match_image(template_file, num, cold):
-    # 加载图像
-    adb_image()
-    img_rgb = cv2.imread('./img/screen.png')
-    img_template = cv2.imread('./img/' + template_file + '/' + str(num) + '.png')
-    w, h = img_template.shape[:-1]
+    while True:
+        # 加载图像
+        adb_image()
+        img_rgb = cv2.imread('./img/screen.png')
+        img_template = cv2.imread('./img/' + template_file + '/' + str(num) + '.png')
+        w, h = img_template.shape[:-1]
 
-    # 使用OpenCV进行模板匹配
-    result = cv2.matchTemplate(img_rgb, img_template, cv2.TM_CCOEFF_NORMED)
+        # 使用OpenCV进行模板匹配
+        result = cv2.matchTemplate(img_rgb, img_template, cv2.TM_CCOEFF_NORMED)
 
-    # 匹配图像的坐标
-    loc = np.where(result >= 0.8)
+        # 匹配图像的坐标
+        loc = np.where(result >= 0.8)
 
-    if len(loc[0]) > 0:
-        # 计算匹配图像的中心点
-        center = (loc[1][0] + w // 2, loc[0][0] + h // 2)
-        print("\033[32m" + "找到匹配图像，中心点坐标为：" + "\033[0m", center)
-        sys.stdout.write("\033[F")  # 光标上移一行
-        sys.stdout.write("\033[K")  # 清除当前行
-        # 模拟点击
-        subprocess.call("sh rish -c \"input tap {} {}\"".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
-    else:
-        print("\033[31m" + f"未找到匹配图像，{cold} 秒后重新查找" + "\033[0m")
-        sys.stdout.write("\033[F")  # 光标上移一行
-        sys.stdout.write("\033[K")  # 清除当前行
-        time.sleep(cold)
-        match_image(template_file, num, cold)
+        if len(loc[0]) > 0:
+            # 计算匹配图像的中心点
+            center = (loc[1][0] + w // 2, loc[0][0] + h // 2)
+            print("\033[32m" + "找到匹配图像，中心点坐标为：" + "\033[0m", center)
+            sys.stdout.write("\033[F")  # 光标上移一行
+            sys.stdout.write("\033[K")  # 清除当前行
+            # 模拟点击
+            subprocess.call("sh rish -c \"input tap {} {}\"".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
+            break
+        else:
+            print("\033[31m" + f"未找到匹配图像，{cold} 秒后重新查找" + "\033[0m")
+            sys.stdout.write("\033[F")  # 光标上移一行
+            sys.stdout.write("\033[K")  # 清除当前行
+            time.sleep(cold)
 
 
 # 加载上场角色池，关卡图
