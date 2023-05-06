@@ -3,7 +3,7 @@ from PIL import Image
 import subprocess
 
 # 使用adb截图
-subprocess.call("sh rish -c \"screencap -p /storage/emulated/0/termux/github/AutoTouHouLostWordTermux/img/screen.png\"", shell=True, stdout=subprocess.DEVNULL)
+subprocess.call("adb shell screencap -p /storage/emulated/0/termux/github/AutoTouHouLostWordTermux/img/screen.png", shell=True, stdout=subprocess.DEVNULL)
 
 # 读取图片文件
 img = Image.open("./img/screen.png")
