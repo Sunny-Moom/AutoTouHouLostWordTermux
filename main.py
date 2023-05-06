@@ -6,7 +6,7 @@ from PIL import Image
 import cv2
 import numpy as np
 ## import pytesseract
-
+ 
 # 关卡名
 ## play_text = '血'
 
@@ -34,7 +34,8 @@ def get_word_coordinates(image_path, word):
 
 # 使用adb截图
 def adb_image():
-    subprocess.call("adb shell screencap -p /storage/emulated/0/termux/github/AutoTouHouLostWordTermux/img/screen.png", shell=True, stdout=subprocess.DEVNULL)
+    subprocess.call("adb shell screencap -p /sdcard/screen.png", shell=True, stdout=subprocess.DEVNULL)
+    subprocess.call("adb pull /sdcard/screen.png ./img/screen.png", shell=True, stdout=subprocess.DEVNULL)
     
 """
 # OCR识别点击
