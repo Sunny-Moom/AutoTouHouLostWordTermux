@@ -5,12 +5,12 @@ import time
 from PIL import Image
 import cv2
 import numpy as np
-import pytesseract
+## import pytesseract
 
 # 关卡名
-play_text = '血'
+## play_text = '血'
 
-
+"""
 # 定义一个函数，接受一个图片路径和一个词作为参数
 def get_word_coordinates(image_path, word):
     # 读取图片文件
@@ -30,13 +30,13 @@ def get_word_coordinates(image_path, word):
 
     # 如果没有匹配，返回None
     return None
-
+"""
 
 # 使用adb截图
 def adb_image():
     subprocess.call("adb shell screencap -p /storage/emulated/0/termux/github/AutoTouHouLostWordTermux/img/screen.png", shell=True, stdout=subprocess.DEVNULL)
     
-
+"""
 # OCR识别点击
 def find_and_click(text):
     while True:
@@ -56,7 +56,7 @@ def find_and_click(text):
             time.sleep(3)
             sys.stdout.write("\033[F")  # 光标上移一行
             sys.stdout.write("\033[K")  # 清除当前行
-
+"""
 
 # 图像识别并点击
 def match_image(template_file, num, cold):
