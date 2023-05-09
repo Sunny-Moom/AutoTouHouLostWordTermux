@@ -141,4 +141,7 @@ def day_pai():
     if not cd:
         for da in ad:
             day_pai5(da)
+            cd = main_functions.search_image("pai", 15, 5, 0.9)
+            if cd:
+                break
     main_functions.match_image("pai", 16, 1)

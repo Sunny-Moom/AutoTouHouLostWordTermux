@@ -1,63 +1,46 @@
-import os
-import subprocess
-import sys
 import time
-import cv2
-import numpy as np
 
+import main_functions
 
-# 使用adb截图
-def adb_image():
-    subprocess.call("adb shell screencap -p /sdcard/screen.png", shell=True, stdout=subprocess.DEVNULL)
-    subprocess.call("adb pull /sdcard/screen.png ./img/screen.png", shell=True, stdout=subprocess.DEVNULL)
-    
-
-# 图像识别并点击
-def match_image(template_file, num, cold):
-    while True:
-        # 加载图像
-        adb_image()
-        img_rgb = cv2.imread('./img/screen.png')
-        img_template = cv2.imread('./img/' + template_file + '/' + str(num) + '.png')
-        w, h = img_template.shape[:-1]
-
-        # 使用OpenCV进行模板匹配
-        result = cv2.matchTemplate(img_rgb, img_template, cv2.TM_CCOEFF_NORMED)
-
-        # 匹配图像的坐标
-        loc = np.where(result >= 0.8)
-
-        if len(loc[0]) > 0:
-            # 计算匹配图像的中心点
-            center = (loc[1][0] + w // 2, loc[0][0] + h // 2)
-            print("\033[32m" + "找到匹配图像，中心点坐标为：" + "\033[0m", center)
-            sys.stdout.write("\033[F")  # 光标上移一行
-            sys.stdout.write("\033[K")  # 清除当前行
-            # 模拟点击
-            subprocess.call("adb shell input tap {} {}".format(center[0], center[1]), shell=True, stdout=subprocess.DEVNULL)
-            break
-        else:
-            print("\033[31m" + f"未找到匹配图像，{cold} 秒后重新查找" + "\033[0m")
-            sys.stdout.write("\033[F")  # 光标上移一行
-            sys.stdout.write("\033[K")  # 清除当前行
-            time.sleep(cold)
-
-
-# 加载上场角色池，关卡图
-def rename_files(path):
-    # 获取所有文件名
-    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-
-    # 对文件名进行重命名，后缀名为txt，因为直接重命名可能会导致文件名重复而报错
-    for i, file in enumerate(files):
-        os.rename(os.path.join(path, file), os.path.join(path, str(i) + '.txt'))
-
-    # 获取所有文件名
-    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-
-    # 将文件后缀名命名回png
-    for i, file in enumerate(files):
-        os.rename(os.path.join(path, file), os.path.join(path, str(i) + '.png'))
-
-    # 返回文件数量
-    return len(files)
+# 主程序
+filename = input("请输入角色池槽位：")
+# 角色池路径
+player_path = "img/player_" + str(filename)
+print("##############脚本已启动##############")
+print("#         正在加载上场角色池         #")
+player_count = main_functions.rename_files(player_path)
+print(f"角色池载入成功，本次战斗角色一共有 {player_count} 位")
+print("#   关卡加载成功，脚本将在5秒后运行  #")
+print("##############脚本已启动##############")
+time.sleep(5)
+player = 0
+xh = 1
+while True:
+    print("\033[32m" + f"战斗中，这是第 {xh} 次循环" + "\033[0m")
+    main_functions.match_image("fight", 11, 2, 0.9)
+    time.sleep(1)
+    main_functions.match_image("fight", 1, 2)
+    time.sleep(1)
+    main_functions.match_image("fight", 2, 2)
+    time.sleep(1)
+    main_functions.match_image("fight", 3, 2)
+    time.sleep(1)
+    main_functions.match_image("fight", 4, 2)
+    time.sleep(1)
+    main_functions.match_image("player_" + str(filename), player, 1)
+    player += 1
+    if player == player_count:
+        player = 0
+    time.sleep(1)
+    main_functions.match_image("fight", 5, 2)
+    time.sleep(1)
+    main_functions.match_image("fight", 6, 2)
+    time.sleep(1)
+    main_functions.match_image("fight", 7, 2)
+    time.sleep(1)
+    main_functions.match_image("fight", 8, 2)
+    time.sleep(1)
+    main_functions.match_image("fight", 9, 2)
+    time.sleep(60)
+    main_functions.match_image("fight", 10, 60)
+    xh += 1
